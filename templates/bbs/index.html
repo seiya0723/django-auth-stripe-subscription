@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hello World test!!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="ログアウト">
+    </form>
+
+    <a href="{% url 'password_change' %}">パスワードの変更</a>
+
+    
+    <hr>
+    
+
+{# すでに有料会員登録している場合は、プランにアクセスできるようにする。有料会員ではない場合は、そのリンクを表示させる。#}
+{% if request.user.customer %}
+<div>
+    <a class="button" href="{% url 'bbs:portal' %}">有料会員登録の設定をする</a>
+
+
+    <a href="{% url 'bbs:premium' %}">有料会員のサービスを使う</a>
+
+</div>
+{% else %}
+<form action="{% url 'bbs:checkout' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="有料会員登録する">
+</form>
+{% endif %}
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+

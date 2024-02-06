@@ -1,0 +1,16 @@
+{% extends "registration/base.html" %}
+
+{% block main %}
+
+<a href="{% url 'signup' %}">アカウント新規作成</a>
+<a href="{% url 'password_reset' %}">パスワードを忘れた</a>
+<h2>ログイン</h2>
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="ログイン">
+</form>
+
+{% endblock %}
+
