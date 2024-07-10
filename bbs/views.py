@@ -100,13 +100,23 @@ portal      = PortalView.as_view()
 class PremiumView(View):
     def get(self, request, *args, **kwargs):
         
+        if not request.user.customer:
+            print("カスタマーIDがセットされていません。")
+            return redirect("bbs:index")
+
+
         # カスタマーIDを元にStripeに問い合わせ
         try:
             subscriptions = stripe.Subscription.list(customer=request.user.customer)
         except:
             print("このカスタマーIDは無効です。")
+
+            request.user.customer   = ""
+            request.user.save()
+
             return redirect("bbs:index")
-        
+
+
         # ステータスがアクティブであるかチェック。
         for subscription in subscriptions.auto_paging_iter():
             if subscription.status == "active":
@@ -116,9 +126,8 @@ class PremiumView(View):
             else:
                 print("サブスクリプションが無効です。")
 
+
         return redirect("bbs:index")
 
 premium     = PremiumView.as_view()
-
-
 
